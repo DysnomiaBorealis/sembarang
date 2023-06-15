@@ -1,11 +1,11 @@
 import uvicorn
-from fastapi import FastAPI, UploadFile, File, jsonify
+from fastapi import FastAPI, UploadFile, File
+from fastapi.responses import ORJSONResponse
 import tensorflow as tf
 import numpy as np
 import os
 from tensorflow.keras.preprocessing import image
 import shutil
-import json
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
@@ -36,7 +36,7 @@ def hello_world():
     return ("hello world")
     
 @app.post("/predict")
-def classify(input: UploadFile = File(...)):
+async def classify(input: UploadFile = File(...)):
     print(input.filename)
     print(type(input.filename))
     savefile = input.filename
@@ -47,7 +47,7 @@ def classify(input: UploadFile = File(...)):
 
     response = { "result": result }
 
-    return jsonify(response)
+    return ORJSONResponse(response)
     
 if __name__ == '__main__':
     uvicorn.run(app, host="0.0.0.0", port=port, timeout_keep_alive=1200)
