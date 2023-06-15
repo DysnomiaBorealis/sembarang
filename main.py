@@ -1,10 +1,11 @@
 import uvicorn
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, jsonify
 import tensorflow as tf
 import numpy as np
 import os
 from tensorflow.keras.preprocessing import image
 import shutil
+import json
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
@@ -43,7 +44,10 @@ def classify(input: UploadFile = File(...)):
         shutil.copyfileobj(input.file, buffer)
     result = predict(savefile)
     os.remove(savefile)
-    return {result}
+
+    response = { "result": result }
+
+    return jsonify(response)
     
 if __name__ == '__main__':
     uvicorn.run(app, host="0.0.0.0", port=port, timeout_keep_alive=1200)
