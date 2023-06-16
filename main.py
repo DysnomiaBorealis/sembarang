@@ -34,7 +34,13 @@ def predict(file):
 @app.get("/")
 def hello_world():
     return ("hello world")
-    
+
+# @app.get("/about")
+# async def file():
+#     response = { "result": "lala" }
+
+#     return ORJSONResponse(response)
+
 @app.post("/predict")
 async def classify(input: UploadFile = File(...)):
     print(input.filename)
@@ -50,4 +56,4 @@ async def classify(input: UploadFile = File(...)):
     return ORJSONResponse(response)
     
 if __name__ == '__main__':
-    uvicorn.run(app, host="0.0.0.0", port=port, timeout_keep_alive=1200)
+    uvicorn.run(app, host="127.0.0.1", port=port, timeout_keep_alive=1200)
